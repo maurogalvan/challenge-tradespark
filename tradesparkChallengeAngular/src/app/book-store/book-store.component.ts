@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BookStoreService } from '../book-store.service';
 
 @Component({
@@ -10,14 +10,17 @@ export class BookStoreComponent implements OnInit {
 
   books: any[] = [];
   filteredBooks: any[] = [];
+  isAddingCategory: { [key: number]: boolean } = {};
+  newBook = { title: '', author: '', category: '' };
+
 
   constructor(private bookStoreService: BookStoreService) { }
 
   ngOnInit(): void {
     this.bookStoreService.getBooks().subscribe((data: any[]) => {
-      this.books = data; 
+      this.books = data;
       this.filteredBooks = data;
-    })
+    });
   }
 
   filterBooks(event: Event): void {
@@ -52,5 +55,29 @@ export class BookStoreComponent implements OnInit {
     return categoriesString;
   }
 
+  deleteCategory(bookTitle: string, category: string, author: string) {
+    const confirmDelete = window.confirm(`¿Estás seguro de que deseas borrar la categoría "${category}" del libro "${bookTitle}"?`);
+
+    if (confirmDelete) {
+      this.bookStoreService.removeCategory(bookTitle, category, author).subscribe(() => {
+        console.log(`Categoría ${category} eliminada del libro ${bookTitle}`);
+        this.bookStoreService.getBooks().subscribe((data: any[]) => {
+          this.books = data;
+          this.filteredBooks = data;
+        });
+      });
+    }
+  }
+
+  addCategory(id_book: number, name_category: string) {
+    if (!name_category) return;
+
+    this.bookStoreService.addCategory(id_book, name_category).subscribe(() => {
+      this.bookStoreService.getBooks().subscribe((data: any[]) => {
+        this.books = data;
+        this.filteredBooks = data;
+      });
+    });
+  }
 
 }

@@ -48,6 +48,8 @@ h1 {
     background-color: #f5f5f5; /* Slightly darker background on row hover */
 }
 
+/* **** */
+
 .search-container {
     display: flex;
     align-items: center;
@@ -78,7 +80,6 @@ h1 {
     background: transparent;
     border: none;
     padding: 0;
-    
 }
 
 .clear-icon {
@@ -93,4 +94,81 @@ h1 {
 
 .clear-icon:hover {
     color: #f00;
+}
+
+.category-pill {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin-right: 5px;
+    font-size: 14px;
+}
+  
+.remove-icon {
+    margin-left: 5px;
+    cursor: pointer;
+    color: #777;
+    font-weight: bold;
+}
+  
+.remove-icon:hover {
+    color: #ff0000;
+}
+
+.add-category-button {
+    background-color: #000;
+    color: white;
+    font-size: 20px;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.add-category-button:hover {
+    background-color: #00b30f;
+}
+
+.addCategory  {
+    padding: 8px;
+    margin: 8px;
+    margin-right: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.buttonAddCategory {
+    background-color: #000;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.buttonAddCategory:hover {
+    background-color: #00b30f;
+}
+
+.add-book-button {
+    margin: 5px 0;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #32cc56;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.add-book-button:hover {
+    background-color: #000000;
+    color: white;
 }

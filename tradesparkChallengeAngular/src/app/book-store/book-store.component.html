@@ -7,7 +7,9 @@
             <span class="clear-icon">✖</span>
         </button>
     </div>
-    
+
+
+
     <div class="book-list">
         <div>
             <table>
@@ -22,9 +24,32 @@
                     <tr *ngFor="let book of filteredBooks">
                         <td>{{ book["title"] }}</td>
                         <td>{{ book["author"]["name"] }}</td>
-                        <td>{{ categoriesToString(book['categories']) }}</td>
+                        <td>
+                            <span *ngFor="let category of book.categories" class="category-pill">
+                              {{ category.name }}
+                              <span class="remove-icon" (click)="deleteCategory(book.title, category.name, book.author.name)">✖</span>
+                            </span>
+                            
+                            <button class="round-button add-category-button" (click)="isAddingCategory[book.id] = true">+</button>
+
+                            <div *ngIf="isAddingCategory[book.id]">
+                                <input 
+                                    class="addCategory"
+                                    type="text" 
+                                    #newCategoryInput 
+                                    placeholder="New category" 
+                                    (keydown.enter)="addCategory(book.id, newCategoryInput.value); isAddingCategory[book.id] = false">
+
+                                <button class="buttonAddCategory" (click)="addCategory(book.id, newCategoryInput.value); isAddingCategory[book.id] = false">Add</button>
+                            </div>
+                           
+                        </td>
+                          
+                        
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+</div>
+

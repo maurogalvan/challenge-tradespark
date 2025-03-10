@@ -17,6 +17,27 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
+    @action(detail=True, methods=['POST'], url_path='add_category')
+    def add_category(self, request, pk=None):
+        book = self.get_object()
+        name_category = request.data.get("name_category")
+
+        if not name_category:
+            return  Response({"error": "Se requiere el nombre de la categoria"}, status = status.HTTP_400_BAD_REQUEST)
+        try:
+            category, created = Category.objects.get_or_create(name=name_category)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        if category in book.categories.all():
+            return Response({"detail": f"La categoria '{name_category}' ya esta asociada al libro"}, status= status.HTTP_200_OK)
+        try:
+            book.categories.add(category)
+
+            return Response({"detail": f"La categoria '{name_category}' fue creada"}, status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
     @action(detail=False, methods=['DELETE'], url_path='remove_category')
     def remove_category(self, request):
 
