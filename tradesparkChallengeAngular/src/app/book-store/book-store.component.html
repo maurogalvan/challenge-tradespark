@@ -1,5 +1,13 @@
 <div class="background-image">
     <h1> Book Store </h1>
+
+    <div class="search-container">
+        <input type="text" placeholder="Search for title, author or category" id="filterInput" (input)="filterBooks($event)" class="search-input"/>
+        <button (click)="clearFilter()" class="clear-button">
+            <span class="clear-icon">✖</span>
+        </button>
+    </div>
+    
     <div class="book-list">
         <div>
             <table>
@@ -11,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let book of books">
+                    <tr *ngFor="let book of filteredBooks">
                         <td>{{ book["title"] }}</td>
                         <td>{{ book["author"]["name"] }}</td>
                         <td>{{ categoriesToString(book['categories']) }}</td>
@@ -20,5 +28,3 @@
             </table>
         </div>
     </div>
-</div>
-
