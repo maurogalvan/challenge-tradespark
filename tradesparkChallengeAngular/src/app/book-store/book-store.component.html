@@ -1,20 +1,66 @@
 <div class="background-image">
     <h1> Book Store </h1>
 
+    <!-- Buscador -->
     <div class="search-container">
         <input type="text" placeholder="Search for title, author or category" id="filterInput" (input)="filterBooks($event)" class="search-input"/>
         <button (click)="clearFilter()" class="clear-button">
             <span class="clear-icon">✖</span>
         </button>
     </div>
+    <!-- Fin buscador -->
+    
+    <button (click)="openModal()" class="add-book-button">Add Book</button>
 
+    <!-- Modal agregar libro -->
+    <div *ngIf="isModalOpen" class="modal">
+        <div class="modal-content">
+            <span (click)="closeModal()" class="close-button">&times;</span>
+            
+            <h2>Add Book</h2>
+            
+            <form (submit)="addBook()">
+                <label for="bookTitle">Title:</label>
+                <input type="text" id="bookTitle" [(ngModel)]="newBook.title" name="title" placeholder="Algorithmic" required />
+                
+                <label for="bookAuthor">Author:</label>
+                <input type="text" id="bookAuthor" [(ngModel)]="newBook.author" name="author" placeholder="TradeSpark" required />
+                
+                <label for="bookCategories">Categories:</label>
+                
+                <!-- Input para agregar categoria con comportamiento de autocomplete -->
+                <input type="text" id="bookCategories" [(ngModel)]="newCategory" name="categories" 
+                    (input)="filterCategories($event)" placeholder="Technology" list="categoriesList" 
+                    (keydown.enter)="addCategoryToNewBook($event)" />
 
-
+                <!-- Categorias filtradas -->
+                <datalist id="categoriesList">
+                    <option *ngFor="let category of filteredCategories" [value]="category.name"></option>
+                </datalist>
+            
+                <!-- Mostrar las categorias agregadas -->
+                <label for="bookCategories">Categorías agregadas:</label>
+                <ul>
+                    <li *ngFor="let category of newBook.categories">
+                    {{ category }}
+                    <button type="button" (click)="removeCategory(category)" class="remove-category-btn">✖</button>
+                    </li>
+                </ul>
+                
+                <button type="submit">Add Book</button>
+            </form>
+        </div>
+    </div>
+    <!-- Fin modal agregar libro -->
+  
+  
+  
     <div class="book-list">
         <div>
             <table>
                 <thead>
                     <tr>
+                        <th>Delete</th>
                         <th>Book Title</th>
                         <th>Author</th>
                         <th>Category</th>
@@ -22,32 +68,69 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let book of filteredBooks">
-                        <td>{{ book["title"] }}</td>
-                        <td>{{ book["author"]["name"] }}</td>
                         <td>
+                            <!-- Boton para eliminar un libro -->
+                            <button class="delete-button" (click)="deleteBook(book.id)">
+                                <img src="../../assets/eliminar.png" alt="delete" width="20" height="20">
+                            </button>
+                        </td>
+                        <td>
+                            <!-- Titulo editable -->
+                            <span class="editable" *ngIf="!book.isEditingTitle" (click)="editField(book, 'title')">
+                                {{ book.title }}
+                            </span>
+                            <input *ngIf="book.isEditingTitle" 
+                                [(ngModel)]="book.title" 
+                                (blur)="saveChanges(book, 'title')" 
+                                (keydown.enter)="saveChanges(book, 'title')" 
+                                type="text" 
+                            />
+                        </td>
+                        <td>
+                            <!-- Autor editable -->
+                            <span class="editable" *ngIf="!book.isEditingAuthor" (click)="editField(book, 'author')">
+                                {{ book.author.name }}
+                            </span>
+                            <input *ngIf="book.isEditingAuthor" 
+                                [(ngModel)]="book.author.name" 
+                                (blur)="saveChanges(book, 'author')" 
+                                (keydown.enter)="saveChanges(book, 'author')" 
+                                type="text" 
+                            />
+                        </td>
+                        <td>
+                            <!-- Muestreo de categorias asociado con una "x" para eliminarlo -->
                             <span *ngFor="let category of book.categories" class="category-pill">
-                              {{ category.name }}
-                              <span class="remove-icon" (click)="deleteCategory(book.title, category.name, book.author.name)">✖</span>
+                                {{ category.name }}
+                                <span class="remove-icon" (click)="deleteCategory(book.title, category.name, book.author.name)">✖</span>
                             </span>
                             
+                            <!-- Boton para agregar una nueva categoria -->
                             <button class="round-button add-category-button" (click)="isAddingCategory[book.id] = true">+</button>
+                            
 
                             <div *ngIf="isAddingCategory[book.id]">
+                                <!-- Input para agregar categoria con comportamiento de autocomplete -->
                                 <input 
-                                    class="addCategory"
                                     type="text" 
-                                    #newCategoryInput 
-                                    placeholder="New category" 
-                                    (keydown.enter)="addCategory(book.id, newCategoryInput.value); isAddingCategory[book.id] = false">
-
-                                <button class="buttonAddCategory" (click)="addCategory(book.id, newCategoryInput.value); isAddingCategory[book.id] = false">Add</button>
+                                    [(ngModel)]="newCategory" 
+                                    name="categories" 
+                                    (input)="filterCategories($event)" 
+                                    placeholder="Add category" 
+                                    list="categoriesList" 
+                                    (keydown.enter)="addCategory(book.id, newCategory); newCategory = ''" 
+                                />
+                                
+                                <!-- Categorias filtradas -->
+                                <datalist id="categoriesList">
+                                    <option *ngFor="let category of filteredCategories" [value]="category.name"></option>
+                                </datalist>
+                                
+                                <button class="buttonAddCategory" (click)="addCategory(book.id, newCategory); isAddingCategory[book.id] = false; newCategory = ''">Add</button>
                             </div>
-                           
                         </td>
-                          
-                        
                     </tr>
-                </tbody>
+                  </tbody>
             </table>
         </div>
     </div>

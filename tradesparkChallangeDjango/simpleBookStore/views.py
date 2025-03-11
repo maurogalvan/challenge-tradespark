@@ -1,3 +1,4 @@
+from sqlite3 import IntegrityError
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -24,17 +25,19 @@ class BookViewSet(viewsets.ModelViewSet):
 
         if not name_category:
             return  Response({"error": "Se requiere el nombre de la categoria"}, status = status.HTTP_400_BAD_REQUEST)
+        
         try:
             category, created = Category.objects.get_or_create(name=name_category)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except IntegrityError:
+            return Response({"error": "Error de integridad en la base de datos."}, status=status.HTTP_400_BAD_REQUEST)
 
         if category in book.categories.all():
             return Response({"detail": f"La categoria '{name_category}' ya esta asociada al libro"}, status= status.HTTP_200_OK)
         try:
             book.categories.add(category)
 
-            return Response({"detail": f"La categoria '{name_category}' fue creada"}, status=status.HTTP_204_NO_CONTENT)
+            message = f"La categoría '{name_category}' fue creada y asociada al libro." if created else f"La categoría '{name_category}' ya existía y fue asociada al libro."
+            return Response({"detail": message}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -61,7 +64,7 @@ class BookViewSet(viewsets.ModelViewSet):
         # ademas pedimos que especifique el author para saber exactamente el libro
         if books.count()>1 and not author_book:
             book_list =  [{"id": book.id, "title": book.title, "author": book.author.name} for book in books]
-            return Response({ "detail": f"Se encontro mas de un libro con el titulo '{title_book}'. Por favor especifica el autor.", "books": book_list }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({ "detail": f"Se encontro mas de un libro con el titulo '{title_book}'. Por favor especifica el autor.", "books": book_list }, status=status.HTTP_300_MULTIPLE_CHOICES)
         
         # Si tenemos el author quiere decir que hay libros con el mismo nombre, entonces por esos libros filtramos tambien el author 
         if author_book:
@@ -70,7 +73,7 @@ class BookViewSet(viewsets.ModelViewSet):
             if not books.exists():
                 return Response({ "detail": f"No existe el libro '{title_book}' con el autor '{author_book}'." }, status=status.HTTP_404_NOT_FOUND)
         
-        # En esta instancia ya queda un solo libro, lo seleccionamos
+        # En esta instancia ya queda un solo libro
         book = books.first()
 
         try:
@@ -89,4 +92,4 @@ class BookViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"detail": f"La categoria '{name_category}' del libro '{title_book}' fue eliminada"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"detail": f"La categoria '{name_category}' del libro '{title_book}' fue eliminada"}, status=status.HTTP_200_OK)

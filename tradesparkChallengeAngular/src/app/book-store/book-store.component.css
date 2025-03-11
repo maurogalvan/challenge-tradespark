@@ -85,7 +85,7 @@ h1 {
 .clear-icon {
     position: absolute;
     right: 25px;
-    top: 50%;
+    top: 35%;
     transform: translateY(-50%);
     font-size: 18px;
     color: #000;
@@ -172,3 +172,128 @@ h1 {
     background-color: #000000;
     color: white;
 }
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1000;
+}
+  
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+  
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    color: #aaa;
+    cursor: pointer;
+}
+  
+.close-button:hover {
+    color: #000;
+}
+  
+form {
+    display: flex;
+    flex-direction: column;
+}
+  
+label {
+    margin: 10px 0 5px;
+    font-size: 14px;
+}
+  
+input {
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+  
+input:focus {
+    border-color: #4CAF50;
+}
+  
+button[type="submit"] {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+  
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.remove-category-btn {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+  
+.remove-category-btn:hover {
+    text-decoration: underline;
+}
+  
+.delete-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+  
+.delete-button img {
+    width: 20px;
+    height: 20px;
+}
+  
+.delete-button:hover img {
+    opacity: 0.7;
+}
+
+
+.editable {
+    cursor: pointer;
+    color: #333;
+  }
+  
+.editable:hover {
+    text-decoration: underline;
+}
+  
+.editable input[type="text"] {
+    border: none;
+    background: none;
+    outline: none;
+    padding: 2px 5px;
+    font-size: 14px;
+    color: #333;
+}
+  
+.editable input[type="text"]:focus {
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2); 
+}
+  
+   
+
+  
