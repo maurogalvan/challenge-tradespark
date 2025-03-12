@@ -30,11 +30,14 @@ export class BookStoreComponent implements OnInit {
   constructor(private bookStoreService: BookStoreService) { }
 
   ngOnInit(): void {
+
+    // Buscamos todos los libros
     this.bookStoreService.getBooks().subscribe((data: any[]) => {
       this.books = data;
       this.filteredBooks = data;
     });
     
+    // Buscamos todas las categorias
     this.bookStoreService.getCategories().subscribe((categories: any[]) => {
       this.allCategories = categories;
     });
@@ -56,7 +59,7 @@ export class BookStoreComponent implements OnInit {
     }
   }
 
-  // Metodo para eliminar el input del buscar
+  // Metodo para eliminar lo que tiene el input del buscar
   clearFilter(): void {
     this.filteredBooks = this.books;
     const inputElement = document.getElementById('filterInput') as HTMLInputElement;
@@ -90,6 +93,7 @@ export class BookStoreComponent implements OnInit {
     }
   }
 
+  // Metodo para poder filtrar
   filterCategories(event: Event): void {
     const value = (event.target as HTMLInputElement).value.toLowerCase();
     
@@ -148,14 +152,14 @@ export class BookStoreComponent implements OnInit {
       alert('La categoria ya existe o esta vacio.');
     }
   }
+
+  // Metodo para eliminar una categoria asociada a un libro
   removeCategory(category: string): void {
     this.newBook.categories = this.newBook.categories.filter(c => c !== category);
   }
   
-
+  // Metoodo para agregar un libro 
   addBook(): void {
-    // Construir el objeto con la estructura esperada
-
     if (!this.newBook.title.trim() || !this.newBook.author.trim()) {
       this.errorMessage = 'El titulo y el autor son obligatorios.';
       return;
@@ -186,6 +190,7 @@ export class BookStoreComponent implements OnInit {
     );
   }
 
+  // Metodo para eliminar un libro especifico
   deleteBook(id_book: number): void {
     const confirmDelete = window.confirm(`¿Estás seguro de que deseas borrar el libro?`);
     if (confirmDelete) {
@@ -195,7 +200,7 @@ export class BookStoreComponent implements OnInit {
     }
   }
 
-  // Activa el modo de edición para el campo seleccionado
+  // Este metodo para poder "activar" los inputs para editar el title o el author
   editField(book: any, field: string): void {
     if (field === 'title') {
       book.isEditingTitle = true;
@@ -204,6 +209,7 @@ export class BookStoreComponent implements OnInit {
     }
   }
 
+  // Metodo para actualizer el titulo del libro o el nombre del autor
   saveChanges(book: any, field: string): void {
     if (field === 'title') {
       // Si se edita el titulo, actualizar el libro
@@ -224,7 +230,7 @@ export class BookStoreComponent implements OnInit {
     }
   }
 
-  // Metodo para actualizar la lista de libros después de un cambio
+  // Metodo para actualizar la lista de los libros
   refreshBooks(): void {
     this.bookStoreService.getBooks().subscribe((data: any[]) => {
       this.books = data;
