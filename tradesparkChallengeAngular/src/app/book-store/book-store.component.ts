@@ -122,10 +122,7 @@ export class BookStoreComponent implements OnInit {
       // Llamar al servicio para agregar la categoria
       this.bookStoreService.addCategory(bookId, categoryName).subscribe(() => {
         // Actualizar la lista de libros después de agregar la categoria
-        this.bookStoreService.getBooks().subscribe((data: any[]) => {
-          this.books = data;
-          this.filteredBooks = data;
-        });
+        this.refreshBooks();
       });
     }
   }
@@ -183,8 +180,6 @@ export class BookStoreComponent implements OnInit {
       (error) => {
         if (error.status === 400 && error.error) {
           this.errorMessage = error.error[0] || 'Error al agregar el libro.';
-        } else {
-          this.errorMessage = 'Ocurrió un error inesperado. Inténtalo de nuevo.';
         }
       }
     );
@@ -192,7 +187,7 @@ export class BookStoreComponent implements OnInit {
 
   // Metodo para eliminar un libro especifico
   deleteBook(id_book: number): void {
-    const confirmDelete = window.confirm(`¿Estás seguro de que deseas borrar el libro?`);
+    const confirmDelete = window.confirm(`¿Estas seguro de que deseas borrar el libro?`);
     if (confirmDelete) {
       this.bookStoreService.deleteBook(id_book).subscribe(() => {
         this.refreshBooks();
