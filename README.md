@@ -35,11 +35,7 @@ Lo cual con el estilo y el html quedo de esta manera visualmente
 
 ![example image](images/buscador-front.png)
 
-Para poder hacer que ahora al escribir filtre por titulo, autor y categoria lo que implemente es una funcion simple es que tome el valor escrito en el buscador y con book.filter filtrar por lo solicitado lo cual se agrega a los libros filtrados 
-
-![example image](images/init.png)
-![example image](images/filter.png)
-
+Para poder hacer que ahora al escribir filtre por titulo, autor y categoria lo que implemente es una funcion simple es que tome el valor escrito en el buscador y con book.filter filtrar por lo solicitado lo cual se agrega a los libros filtrados.
 Entonces para poder demostrar como funciona vemos toda la pantalla principal de esta manera
 
 ![example image](images/principal.png)
@@ -61,6 +57,23 @@ Con eso terminamos el punto uno de este challenge.
 ### Segundo punto (Django, Back-side):
 - Dado el título de un libro y el nombre de una categoría, implementar la eliminación de esa categoría para el libro asociado.
 
+Para este punto como dije arriba hay que tener cuidado con los libros que tienen el mismo nombre pero son de distintos autores, haciendo pruebas me di cuenta que se podia agregar el mismo libro, o sea el mismo titulo con el mismo autor, lo cual no me parecio correcto, entonces edite el serializer en el create del libro y agrege que antes de agregarlo que revise si ya existe este libro con el mismo autor
+
+![example image](images/serializer.png)
+
+Con estas dos lineas comprobamos antes de agregar un libro que ya no exista, ya que por ejemplo agregar el title en el modelo con unique true no me parece correcto por que puede haber libros con el mismo nombre pero con otro autor.
+Despues de agregar esto se realizo el "remove_category" el cual recibe el titulo del libro y el nombre de la categoria, si este libro existe y tiene asociada esa categoria la elimina perfectamente, pero, ¿y si hay mas libros con el mismo nombre? para esto lo que hice fue agregar un control mas, si existen libros devuelve que no puede eliminar ya que se encontraron mas de un libro con el mismo titulo y te muestra los libros.
+
+![example image](images/postman.png)
+
+Entonces ademas de poder enviar el titulo del libro y el nombre de la categoria tambien deje que puedan agregar el author del libro que esta de forma opcional para estos casos, con este parametro ya sabemos exactamente que libro es y si existe esa categoria en el libro la elimina.
+
+![example image](images/postman2.png)
+
+Tambien hubiera sido mas facil si se pedia el id del libro ya que con eso nos evitamos los titulos repetidos pero no es lo que pedia en el punto del challenge.
+
+Con eso damos por finalizo el punto 2 del challenge.
 
 ### Tercer punto (Opcional):
 - Implementar un botón en la sección book store que permite eliminar una categoría perteneciente a un libro. Este botón, al ser clickeado, deberá interactuar con el backend, el cual ejecutará la lógica implementada en el segundo punto para hacer efectiva la eliminación.
+
