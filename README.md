@@ -86,7 +86,7 @@ Asi directamente para eliminar una categoria tocamos en la cruz, nos pregunta si
 
 ### Extras:
 
-- Agregar categorias asociadas a un libro
+#### Agregar categorias asociadas a un libro
 
 Para poder agregar una nueva categoria asociada a un libro, lo que hice fue primero implementar la parte del backend el cual tuve que crear una funcion que reciba el id del libro y el nombre de la categoria ya que no lo podemos hacer por el modelview por que las categorias es un modelo y tenemos que especificarlo, tambien pasaria lo mismo si quisieramos hacer un update del author asociado a un libro, abria que crear un update_author en bookviewset para poder editarlo, lo que si es que tambien si la categoria que se quiere asociar si no existe la crea. En el front se agrego un "+" al final de cada listado de categorias del libro en el cual puede agregar la categoria nueva
 
@@ -102,7 +102,7 @@ Si elegimos una categoria que ya existe como en la siguiente imagen
 
 Aparece un cartel en el que avisa que esa categoria ya esta asociada a ese libro, el caso de que no existe lo agrega y se actualiza la visual con la nueva categoria.
 
-- Agregar un libro
+#### Agregar un libro
 
 Agrege la opcion de poder agregar un libro, el cual sale un modal para que podamos agregar tanto el titulo, el author y las categorias asociadas al libro
 
@@ -116,21 +116,32 @@ Tambien en la parte de las categorias agrege el autocompletado con las categoria
 
 ![example image](images/agregarlibro-auto.png)
 
-- Eliminar libro
+#### Eliminar libro
 
 Para eliminar libro usamos lo que nos brinda django con su modelview el cual permite ya el delete, entonces les pasamos el id y nos elimina tanto el libro como sus relaciones en las categorias o sea en la tabla intermedia manytomany que crea django, y en la parte visual agregamos un icono para que el usuario pueda presionar quedando de esta manera
 
 ![example image](images/eliminarlibro.png)
 
 
-- Editar titulo del libro y nombre del autor
+#### Editar titulo del libro y nombre del autor
 
 Tambien se agrego la opcion de poder editar el nombre del libro haciendo click en el titulo, se abre un input en el cual podemos editarlo, al igual que el nombre del autor, esto en la parte del backend usamos lo que nos brinda django haciendo uso del patch. En la parte visual queda de esta manera
 
 ![example image](images/editartituloautor.png)
 
-Notas: No me parecio necesario editar el modelo agregando en el name unique true, ya que al agregar las categorias actualmente si ya existe la usa y no la crea nuevamente, elimine la categoria repetida, al igual que el autor repetido. Lo ideal seria agregarlo para evitar cualquier inconveniente en el futuro.
 
-Espero que la parte de angular este relativamente bien, seguramente se pueda modularizar mas y mejorar el codigo para que sea mas eficiente, este es mi primer contacto con angular.
+### Agregar unique true en el modelo category
 
-Muchas gracias por analizar este codigo, espero un feedback y que nos veamos pronto!
+Al finalizar el challenge queria modificar el modelo, ya que no lo pidieron pero igualmente agrege estas cosas extras en el front, ademas sin el unique true en estos casos anda bien y no agrega categorias repetidas, pero si el futuro se extiende es mejor tenerlo para mi, tambien queria comentar lo que paso y como lo solucione, ya que al agregar en el modelo hice el makemigrations y el migrate, segun django se habia agregado correctamente en la bd, pero al hacer pruebas me daba error con la tabla simpleBookStore_book_categories__old 
+![example image](images/category_unique.png)
+la cual es la tabla que crea django para poder hacer los migrate, al django estar usando una tabla anterior hace que falle, por ende tuve que solucionarlo a mano entrando en la bd lo cual me fue mas sencillo hacerlo directamente en datagrip y habilitar la edicion del esquema
+![example image](images/category_unique_2.png)
+modificar la referencia que quedo mal en la tabla manytomany con un update simple y volver a desactivar la edicion del esquema, al hacer esto todo siguio funcionando correctamente
+![example image](images/category_unique_3.png)
+
+No me parecio necesario editar el modelo en la rama principal agregando en el name unique true, ya que al agregar las categorias actualmente si ya existe la usa y no la crea nuevamente, elimine la categoria repetida que venia por default en la bd, al igual que el autor repetido. Lo ideal seria agregarlo para evitar cualquier inconveniente en el futuro, por eso mismo lo agrege en otra rama.
+
+Notas:
+Espero que la parte de angular este relativamente bien, seguramente se pueda modularizar mas y mejorar el codigo para que sea mas eficiente, este es mi primer contacto con angular. Tambien queria aclarar que hice cosas de mas considerando que esto es un challenge, obviamente que si esto fuera en un ambito laboral no lo haria sin antes consultar o que me lo pidan, ya que si me asignan la tarea de hacer un abm y modifico el modelo no es correcto.
+
+#### Muchas gracias por analizar este codigo, espero un feedback y que nos veamos pronto!
