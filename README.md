@@ -129,8 +129,18 @@ Tambien se agrego la opcion de poder editar el nombre del libro haciendo click e
 
 ![example image](images/editartituloautor.png)
 
-Notas: No me parecio necesario editar el modelo agregando en el name unique true, ya que al agregar las categorias actualmente si ya existe la usa y no la crea nuevamente, elimine la categoria repetida, al igual que el autor repetido. Lo ideal seria agregarlo para evitar cualquier inconveniente en el futuro.
+### Agregar unique true en el modelo category
 
-Espero que la parte de angular este relativamente bien, seguramente se pueda modularizar mas y mejorar el codigo para que sea mas eficiente, este es mi primer contacto con angular.
+Al finalizar el challenge queria modificar el modelo, ya que no lo pidieron pero igualmente agrege estas cosas extras en el front, ademas sin el unique true en estos casos anda bien y no agrega categorias repetidas, pero si el futuro se extiende es mejor tenerlo para mi, tambien queria comentar lo que paso y como lo solucione, ya que al agregar en el modelo hice el makemigrations y el migrate, segun django se habia agregado correctamente en la bd, pero al hacer pruebas me daba error con la tabla simpleBookStore_book_categories__old 
+![example image](images/category_unique.png)
+la cual es la tabla que crea django para poder hacer los migrate, al django estar usando una tabla anterior hace que falle, por ende tuve que solucionarlo a mano entrando en la bd lo cual me fue mas sencillo hacerlo directamente en datagrip y habilitar la edicion del esquema
+![example image](images/category_unique_2.png)
+modificar la referencia que quedo mal en la tabla manytomany con un update simple y volver a desactivar la edicion del esquema, al hacer esto todo siguio funcionando correctamente
+![example image](images/category_unique_3.png)
 
-Muchas gracias por analizar este codigo, espero un feedback y que nos veamos pronto!
+No me parecio necesario editar el modelo en la rama principal agregando en el name unique true, ya que al agregar las categorias actualmente si ya existe la usa y no la crea nuevamente, elimine la categoria repetida que venia por default en la bd, al igual que el autor repetido. Lo ideal seria agregarlo para evitar cualquier inconveniente en el futuro, por eso mismo lo agrege en otra rama.
+
+Notas:
+Espero que la parte de angular este relativamente bien, seguramente se pueda modularizar mas y mejorar el codigo para que sea mas eficiente, este es mi primer contacto con angular. Tambien queria aclarar que hice cosas de mas considerando que esto es un challenge, obviamente que si esto fuera en un ambito laboral no lo haria sin antes consultar o que me lo pidan, ya que si me asignan la tarea de hacer un abm y modifico el modelo no es correcto.
+
+#### Muchas gracias por analizar este codigo, espero un feedback y que nos veamos pronto!
