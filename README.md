@@ -60,6 +60,7 @@ Con eso terminamos el punto uno de este challenge.
 Para este punto como dije arriba hay que tener cuidado con los libros que tienen el mismo nombre pero son de distintos autores, haciendo pruebas me di cuenta que se podia agregar el mismo libro, o sea el mismo titulo con el mismo autor, lo cual no me parecio correcto, entonces edite el serializer en el create del libro y agrege que antes de agregarlo que revise si ya existe este libro con el mismo autor
 
 ![example image](images/serializer.png)
+![example image](images/postman-serializer.png)
 
 Con estas dos lineas comprobamos antes de agregar un libro que ya no exista, ya que por ejemplo agregar el title en el modelo con unique true no me parece correcto por que puede haber libros con el mismo nombre pero con otro autor.
 Despues de agregar esto se realizo el "remove_category" el cual recibe el titulo del libro y el nombre de la categoria, si este libro existe y tiene asociada esa categoria la elimina perfectamente, pero, ¿y si hay mas libros con el mismo nombre? para esto lo que hice fue agregar un control mas, si existen libros devuelve que no puede eliminar ya que se encontraron mas de un libro con el mismo titulo y te muestra los libros.
@@ -77,3 +78,59 @@ Con eso damos por finalizo el punto 2 del challenge.
 ### Tercer punto (Opcional):
 - Implementar un botón en la sección book store que permite eliminar una categoría perteneciente a un libro. Este botón, al ser clickeado, deberá interactuar con el backend, el cual ejecutará la lógica implementada en el segundo punto para hacer efectiva la eliminación.
 
+Para este tercer punto modifique varias cosas del front, en principio teniamos las categorias pero en un string separados por comas, lo que hice fue separarlos y agregarle una "x" a la derecha lo cual permite eliminar directamente esta categoria, y para eliminarlo le pasamos el titulo del libro, el autor y la categoria, quedando las categorias visualmente de esta manera
+
+![example image](images/categorias-punto3.png)
+
+Asi directamente para eliminar una categoria tocamos en la cruz, nos pregunta si estamos seguros de que queremos eliminar esa categoria para el libro y listo!.
+
+### Extras:
+
+- Agregar categorias asociadas a un libro
+
+Para poder agregar una nueva categoria asociada a un libro, lo que hice fue primero implementar la parte del backend el cual tuve que crear una funcion que reciba el id del libro y el nombre de la categoria ya que no lo podemos hacer por el modelview por que las categorias es un modelo y tenemos que especificarlo, tambien pasaria lo mismo si quisieramos hacer un update del author asociado a un libro, abria que crear un update_author en bookviewset para poder editarlo, lo que si es que tambien si la categoria que se quiere asociar si no existe la crea. En el front se agrego un "+" al final de cada listado de categorias del libro en el cual puede agregar la categoria nueva
+
+![example image](images/category-visual.png)
+
+En el campo que aparece al escribir aparecen las opciones de categorias que ya existen ya que si existe podemos agregarlo directamente y es mas rapido agregarlo asi
+
+![example image](images/category-visual-auto.png)
+
+Si elegimos una categoria que ya existe como en la siguiente imagen
+
+![example image](images/category-visual-repetido.png)
+
+Aparece un cartel en el que avisa que esa categoria ya esta asociada a ese libro, el caso de que no existe lo agrega y se actualiza la visual con la nueva categoria.
+
+- Agregar un libro
+
+Agrege la opcion de poder agregar un libro, el cual sale un modal para que podamos agregar tanto el titulo, el author y las categorias asociadas al libro
+
+![example image](images/agregarlibro.png)
+
+Esto en la parte del back usamos el create que ya venia con el challenge, si por ejemplo queremos agregar un libro que ya existe con el mismo titulo y el mismo autor nos salta el error indicando que ya existe 
+
+![example image](images/agregarlibro-error.png)
+
+Tambien en la parte de las categorias agrege el autocompletado con las categorias que ya existen
+
+![example image](images/agregarlibro-auto.png)
+
+- Eliminar libro
+
+Para eliminar libro usamos lo que nos brinda django con su modelview el cual permite ya el delete, entonces les pasamos el id y nos elimina tanto el libro como sus relaciones en las categorias o sea en la tabla intermedia manytomany que crea django, y en la parte visual agregamos un icono para que el usuario pueda presionar quedando de esta manera
+
+![example image](images/eliminarlibro.png)
+
+
+- Editar titulo del libro y nombre del autor
+
+Tambien se agrego la opcion de poder editar el nombre del libro haciendo click en el titulo, se abre un input en el cual podemos editarlo, al igual que el nombre del autor, esto en la parte del backend usamos lo que nos brinda django haciendo uso del patch. En la parte visual queda de esta manera
+
+![example image](images/editartituloautor.png)
+
+Notas: No me parecio necesario editar el modelo agregando en el name unique true, ya que al agregar las categorias actualmente si ya existe la usa y no la crea nuevamente, elimine la categoria repetida, al igual que el autor repetido. Lo ideal seria agregarlo para evitar cualquier inconveniente en el futuro.
+
+Espero que la parte de angular este relativamente bien, seguramente se pueda modularizar mas y mejorar el codigo para que sea mas eficiente, este es mi primer contacto con angular.
+
+Muchas gracias por analizar este codigo, espero un feedback y que nos veamos pronto!
