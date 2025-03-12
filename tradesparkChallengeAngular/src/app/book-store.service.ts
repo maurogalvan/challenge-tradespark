@@ -46,5 +46,9 @@ export class BookStoreService {
     return this.client.patch(`http://localhost:8000/bookStore/books/${id_book}/`, updatedData);
   }
 
- 
+  // Patch para modificar un dato de un autor
+  updateAuthor(id_author: number, updatedData: any) {
+    return this.client.patch(`http://localhost:8000/bookStore/authors/${id_author}/`, updatedData);
+  }
+
 }

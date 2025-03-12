@@ -24,6 +24,9 @@ export class BookStoreComponent implements OnInit {
   allCategories: any[] = [];
   filteredCategories: any[] = [];
 
+  errorMessage: string = '';
+
+
   constructor(private bookStoreService: BookStoreService) { }
 
   ngOnInit(): void {
@@ -152,6 +155,12 @@ export class BookStoreComponent implements OnInit {
 
   addBook(): void {
     // Construir el objeto con la estructura esperada
+
+    if (!this.newBook.title.trim() || !this.newBook.author.trim()) {
+      this.errorMessage = 'El título y el autor son obligatorios.';
+      return;
+    }
+
     const bookData = {
       title: this.newBook.title,
       author: {
@@ -163,17 +172,16 @@ export class BookStoreComponent implements OnInit {
     // Hacer el post para agregar
     this.bookStoreService.addBook(bookData).subscribe(
       (response) => {
-        console.log('Libro agregado exitosamente:', response);
+        
         this.closeModal();
-  
-        // Recargar la lista de libros
-        this.bookStoreService.getBooks().subscribe((data: any[]) => {
-          this.books = data;
-          this.filteredBooks = data; 
-        });
+        this.refreshBooks();
       },
       (error) => {
-        console.error('Error al agregar el libro:', error);
+        if (error.status === 400 && error.error) {
+          this.errorMessage = error.error[0] || 'Error al agregar el libro.';
+        } else {
+          this.errorMessage = 'Ocurrió un error inesperado. Inténtalo de nuevo.';
+        }
       }
     );
   }
@@ -182,11 +190,7 @@ export class BookStoreComponent implements OnInit {
     const confirmDelete = window.confirm(`¿Estás seguro de que deseas borrar el libro?`);
     if (confirmDelete) {
       this.bookStoreService.deleteBook(id_book).subscribe(() => {
-       
-        this.bookStoreService.getBooks().subscribe((data: any[]) => {
-          this.books = data;
-          this.filteredBooks = data;
-        });
+        this.refreshBooks();
       });
     }
   }
@@ -200,26 +204,34 @@ export class BookStoreComponent implements OnInit {
     }
   }
 
-  // Guarda los cambios después de editar
   saveChanges(book: any, field: string): void {
-    const updatedData = {};
     if (field === 'title') {
-      updatedData['title'] = book.title;
-      book.isEditingTitle = false;  // Sale del modo de edición
-    } else if (field === 'author') {
-      updatedData['author'] = book.author.name;
-      book.isEditingAuthor = false;  // Sale del modo de edición
-    }
+      // Si se edita el título, actualizar el libro
+      const updatedData = { title: book.title };
+      book.isEditingTitle = false;
 
-    // Enviar el PATCH al backend
-    this.bookStoreService.updateBook(book.id, updatedData).subscribe(
-      (response) => {
-        // Recargar la lista de libros
-        this.bookStoreService.getBooks().subscribe((data: any[]) => {
-          this.books = data;
-          this.filteredBooks = data; 
-        });
-      }
-    );
+      this.bookStoreService.updateBook(book.id, updatedData).subscribe(() => {
+        this.refreshBooks();
+      });
+    } else if (field === 'author') {
+      // Si se edita el autor, actualizar el autor directamente
+      const updatedAuthor = { name: book.author.name };
+      book.isEditingAuthor = false;
+
+      this.bookStoreService.updateAuthor(book.author.id, updatedAuthor).subscribe(() => {
+        this.refreshBooks();
+      });
+    }
   }
+
+  // Metodo para actualizar la lista de libros después de un cambio
+  refreshBooks(): void {
+    this.bookStoreService.getBooks().subscribe((data: any[]) => {
+      this.books = data;
+      this.filteredBooks = data;
+    });
+  }
+
+  
+
 }

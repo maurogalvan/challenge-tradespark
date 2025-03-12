@@ -293,7 +293,16 @@ button[type="submit"]:hover {
 .editable input[type="text"]:focus {
     box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2); 
 }
-  
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+    background-color: #ffe6e6;
+    padding: 8px;
+    border-radius: 5px;
+}
    
 
   

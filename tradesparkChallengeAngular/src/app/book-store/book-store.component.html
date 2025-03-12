@@ -1,4 +1,6 @@
 <div class="background-image">
+    <!-- Mostrar mensaje de error si existe -->
+    
     <h1> Book Store </h1>
 
     <!-- Buscador -->
@@ -18,6 +20,10 @@
             <span (click)="closeModal()" class="close-button">&times;</span>
             
             <h2>Add Book</h2>
+
+            <div *ngIf="errorMessage" class="error-message">
+                {{ errorMessage }}
+            </div>
             
             <form (submit)="addBook()">
                 <label for="bookTitle">Title:</label>
@@ -26,7 +32,7 @@
                 <label for="bookAuthor">Author:</label>
                 <input type="text" id="bookAuthor" [(ngModel)]="newBook.author" name="author" placeholder="TradeSpark" required />
                 
-                <label for="bookCategories">Categories:</label>
+                <label for="bookCategories">Categories: (Enter and press "Enter")</label>
                 
                 <!-- Input para agregar categoria con comportamiento de autocomplete -->
                 <input type="text" id="bookCategories" [(ngModel)]="newCategory" name="categories" 

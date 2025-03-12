@@ -18,22 +18,28 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
+    # Asociar una categoria a un libro
     @action(detail=True, methods=['POST'], url_path='add_category')
     def add_category(self, request, pk=None):
+        # Se obtiene el id del book de la url, y el nombre de la categoria por json
         book = self.get_object()
         name_category = request.data.get("name_category")
 
+        # Chequeamos que exista la catetgoria
         if not name_category:
             return  Response({"error": "Se requiere el nombre de la categoria"}, status = status.HTTP_400_BAD_REQUEST)
         
         try:
+            # Si existe la categoria la usamos, si no existe la creamos
             category, created = Category.objects.get_or_create(name=name_category)
         except IntegrityError:
             return Response({"error": "Error de integridad en la base de datos."}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Chequeamos que ya no este asociada al libro
         if category in book.categories.all():
             return Response({"detail": f"La categoria '{name_category}' ya esta asociada al libro"}, status= status.HTTP_200_OK)
         try:
+            # Asociamos la categoria al libro
             book.categories.add(category)
 
             message = f"La categoría '{name_category}' fue creada y asociada al libro." if created else f"La categoría '{name_category}' ya existía y fue asociada al libro."
@@ -41,6 +47,7 @@ class BookViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Eliminar categoria asociada a un libro
     @action(detail=False, methods=['DELETE'], url_path='remove_category')
     def remove_category(self, request):
 
