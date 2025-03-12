@@ -19,7 +19,7 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = BookSerializer
 
     # Asociar una categoria a un libro
-    @action(detail=True, methods=['POST'], url_path='add_category')
+    @action(detail=True, methods=['POST'], url_path='add_category', url_name='add_category')
     def add_category(self, request, pk=None):
         # Se obtiene el id del book de la url, y el nombre de la categoria por json
         book = self.get_object()
@@ -42,13 +42,13 @@ class BookViewSet(viewsets.ModelViewSet):
             # Asociamos la categoria al libro
             book.categories.add(category)
 
-            message = f"La categoría '{name_category}' fue creada y asociada al libro." if created else f"La categoría '{name_category}' ya existía y fue asociada al libro."
+            message = f"La categoria '{name_category}' fue creada y asociada al libro." if created else f"La categoria '{name_category}' ya existia y fue asociada al libro."
             return Response({"detail": message}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     # Eliminar categoria asociada a un libro
-    @action(detail=False, methods=['DELETE'], url_path='remove_category')
+    @action(detail=False, methods=['DELETE'], url_path='remove_category', url_name='remove_category')
     def remove_category(self, request):
 
         # Recibimos estos datos mediante un JSON

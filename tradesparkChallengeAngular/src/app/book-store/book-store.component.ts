@@ -77,7 +77,7 @@ export class BookStoreComponent implements OnInit {
 
   // Metodo para eliminar categoria de un libro
   deleteCategory(bookTitle: string, category: string, author: string) {
-    const confirmDelete = window.confirm(`¿Estás seguro de que deseas borrar la categoría "${category}" del libro "${bookTitle}"?`);
+    const confirmDelete = window.confirm(`¿Estás seguro de que deseas borrar la categoria "${category}" del libro "${bookTitle}"?`);
 
     if (confirmDelete) {
       this.bookStoreService.removeCategory(bookTitle, category, author).subscribe(() => {
@@ -106,18 +106,18 @@ export class BookStoreComponent implements OnInit {
   // Metodo para agregar categoria a un libro
   addCategory(bookId: number, categoryName: string): void {
     if (categoryName.trim()) {
-      // Verificar si la categoría ya está asociada al libro
+      // Verificar si la categoria ya está asociada al libro
       const book = this.books.find(b => b.id === bookId);
       const isCategoryAlreadyAdded = book?.categories.some(cat => cat.name.toLowerCase() === categoryName.toLowerCase());
 
       if (isCategoryAlreadyAdded) {
-        alert('Esta categoría ya está asociada a este libro.');
+        alert('Esta categoria ya está asociada a este libro.');
         return;
       }
 
-      // Llamar al servicio para agregar la categoría
+      // Llamar al servicio para agregar la categoria
       this.bookStoreService.addCategory(bookId, categoryName).subscribe(() => {
-        // Actualizar la lista de libros después de agregar la categoría
+        // Actualizar la lista de libros después de agregar la categoria
         this.bookStoreService.getBooks().subscribe((data: any[]) => {
           this.books = data;
           this.filteredBooks = data;
@@ -145,7 +145,7 @@ export class BookStoreComponent implements OnInit {
       this.newBook.categories.push(this.newCategory.trim());  
       this.newCategory = '';
     } else {
-      alert('La categoría ya existe o esta vacio.');
+      alert('La categoria ya existe o esta vacio.');
     }
   }
   removeCategory(category: string): void {
@@ -157,7 +157,7 @@ export class BookStoreComponent implements OnInit {
     // Construir el objeto con la estructura esperada
 
     if (!this.newBook.title.trim() || !this.newBook.author.trim()) {
-      this.errorMessage = 'El título y el autor son obligatorios.';
+      this.errorMessage = 'El titulo y el autor son obligatorios.';
       return;
     }
 
@@ -206,7 +206,7 @@ export class BookStoreComponent implements OnInit {
 
   saveChanges(book: any, field: string): void {
     if (field === 'title') {
-      // Si se edita el título, actualizar el libro
+      // Si se edita el titulo, actualizar el libro
       const updatedData = { title: book.title };
       book.isEditingTitle = false;
 

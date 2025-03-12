@@ -29,7 +29,7 @@ class BookSerializer(serializers.ModelSerializer):
 
         # Se agrego esto para controlar que no haya libros con el autor iguales
         if Book.objects.filter(title=validated_data['title'], author=author).exists():
-            raise serializers.ValidationError("El libro con este título y autor ya existe.")
+            raise serializers.ValidationError("El libro con este titulo y autor ya existe.")
         
         book = Book.objects.create(author=author, **validated_data)
         for category_data in categories_data:
